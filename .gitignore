@@ -1,0 +1,9 @@
+
+# Files
+build.xml
+manifest.mf
+
+# Folders
+build/
+nbproject/
+dist/
