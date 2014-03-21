@@ -2,7 +2,6 @@ package galaxy;
 
 import galaxy.util.Vector;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Camera {
@@ -11,7 +10,7 @@ public class Camera {
     private static Vector oldPosition = new Vector();
     private static Vector rotation = new Vector();
     private static Vector oldRotation = new Vector();
-    private static final float speed = 0.025f;
+    private static final float speed = 0.5f;
     
     public static float getCamX() { return position.getX(); }
     public static float getCamY() { return position.getY(); }
@@ -33,9 +32,7 @@ public class Camera {
         return -rotation.getX();
     }
     
-    public static void init() {
-        Mouse.setGrabbed(true);
-    }
+    public static void init() { }
     
     public static boolean hasNotMoved() {
         return oldPosition.equals(position) && rotation.equals(oldRotation);
@@ -46,18 +43,19 @@ public class Camera {
         oldRotation.set(rotation);
         updateRotation(delta);
         updatePosition(delta);
-        updatePerspective();
         return position.toString();
     }
-
+    
     public static void updatePosition(int delta) {
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             position.setX(position.getX()-(float)(Math.sin(-rotation.getZ()*Math.PI/180)*speed*delta));
             position.setY(position.getY()-(float)(Math.cos(-rotation.getZ()*Math.PI/180)*speed*delta));
+            //position.setZ(position.getX()-(float)(Math.cos(-rotation.getY()*Math.PI/180)*speed*delta));
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             position.setX(position.getX()+(float)(Math.sin(-rotation.getZ()*Math.PI/180)*speed*delta));
             position.setY(position.getY()+(float)(Math.cos(-rotation.getZ()*Math.PI/180)*speed*delta));
+            //position.setZ(position.getX()+(float)(Math.cos(-rotation.getY()*Math.PI/180)*speed*delta));
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             position.setX(position.getX()+(float)(Math.sin((-rotation.getZ()-90)*Math.PI/180)*speed*delta));
@@ -72,33 +70,24 @@ public class Camera {
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
             position.setZ(position.getZ()-speed*delta);
     }
-
+    
     public static void updateRotation(int delta) {
         //Mouse Input for looking around...
-        if (Mouse.isGrabbed()) {
-            float mouseDX = Mouse.getDX()*0.128f;
-            float mouseDY = Mouse.getDY()*0.128f;
-            
-            if (rotation.getZ()+mouseDX>=360)
-                rotation.setZ(rotation.getZ()+mouseDX-360);
-            else if (rotation.getZ()+mouseDX<0)
-                rotation.setZ(rotation.getZ()+mouseDX+360);
-            else
-                rotation.setZ(rotation.getZ()+mouseDX);
-            
-            if (rotation.getX()-mouseDY>=-89&&rotation.getX()-mouseDY<=89)
-                rotation.setX(rotation.getX()-mouseDY);
-            else if (rotation.getX()-mouseDY<-89)
-                rotation.setX(-89);
-            else if (rotation.getX()-mouseDY>89)
-                rotation.setX(89);
-        }
+        if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+			rotation.z -= delta/16;
+		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+			rotation.z += delta/16;
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+			rotation.x -= delta/16;
+		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+			rotation.x += delta/16;
     }
     
-    public static void updatePerspective() {
-        GL11.glRotatef(rotation.getX(),1,0,0);
-        GL11.glRotatef(rotation.getY(),0,0,1);
-        GL11.glRotatef(rotation.getZ(),0,1,0);
-        GL11.glTranslatef(-position.getX(),-position.getZ()-2.0f,-position.getY());
+    public static void apply(int delta) {
+        GL11.glRotated(rotation.getX(),1,0,0);
+        GL11.glRotated(rotation.getY(),0,0,1);
+        GL11.glRotated(rotation.getZ(),0,1,0);
+        GL11.glTranslated(-position.getX(),-position.getZ(),-position.getY());
     }
 }

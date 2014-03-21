@@ -42,19 +42,22 @@ public class Galaxy {
     private int VBOVertexHandle;
     private int VBOColorHandle;
     
-    public final int points = 1000000;
+    public final int numPoints = 250000;
     
     private void init() {
         Camera.init();
-        this.initialize3D();
+        //this.initialize3D();
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY); // Needed for VBO's.
+        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY); // Needed to send color with VBO's.
+        
         VBOVertexHandle = GL15.glGenBuffers();
         VBOColorHandle = GL15.glGenBuffers();
         
-        starVertices = new VerticesManager(points*3);
+        starVertices = new VerticesManager(numPoints*3);
         
-        for (int i=0;i<points;i++) {
+        for (int i=0;i<numPoints;i++) {
             starVertices.setColor((float)Math.random(),(float)Math.random(),(float)Math.random());
-            starVertices.addVertex((float)(Math.random()*1000-500),(float)(Math.random()*1000-500),(float)(Math.random()*1000-500));
+            starVertices.addVertex((float)(Math.random()*10000-5000),(float)(Math.random()*10000-5000),(float)(Math.random()*10000-5000));
         }
         
         starVertices.getPositionData().rewind();
@@ -79,21 +82,36 @@ public class Galaxy {
         
         Camera.update(delta);
         
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glColor4f(0, 0, 0, 0.03f);
+			GL11.glVertex3d(-3, +3, -1);
+			GL11.glVertex3d(+3, +3, -1);
+			GL11.glVertex3d(+3, -3, -1);
+			GL11.glVertex3d(-3, -3, -1);
+		GL11.glEnd();
+        
+        Camera.apply(delta);
+        
         GL11.glEnable(GL11.GL_BLEND);
+        
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
         
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,VBOVertexHandle);
         GL11.glVertexPointer(3,GL11.GL_FLOAT,0,0L);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,VBOColorHandle);
         GL11.glColorPointer(3,GL11.GL_FLOAT,0,0L);
-        GL11.glDrawArrays(GL11.GL_POINTS,0,points);
+        GL11.glDrawArrays(GL11.GL_POINTS,0,numPoints);
         
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glPopMatrix();
     }
     
     public void clearScreen() {
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT); // GL11.GL_COLOR_BUFFER_BIT
         GL11.glViewport(0, 0, 1366, 768);
     }
     
