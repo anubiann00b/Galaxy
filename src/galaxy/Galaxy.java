@@ -1,6 +1,7 @@
 package galaxy;
 
 import galaxy.render.VerticesManager;
+import galaxy.util.ColorRange;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -8,6 +9,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.util.glu.GLU;
+import org.newdawn.slick.Color;
 
 public class Galaxy {
     
@@ -42,9 +44,12 @@ public class Galaxy {
     private int VBOVertexHandle;
     private int VBOColorHandle;
     
+    private ColorRange starColors;
+    
     public final int numPoints = 250000;
     
     private void init() {
+        starColors = new ColorRange("colors.png");
         Camera.init();
         //this.initialize3D();
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY); // Needed for VBO's.
@@ -56,7 +61,8 @@ public class Galaxy {
         starVertices = new VerticesManager(numPoints*3);
         
         for (int i=0;i<numPoints;i++) {
-            starVertices.setColor((float)Math.random(),(float)Math.random(),(float)Math.random());
+            Color c = starColors.getColor();
+            starVertices.setColor(c.r,c.g,c.b);
             starVertices.addVertex((float)(Math.random()*10000-5000),(float)(Math.random()*10000-5000),(float)(Math.random()*10000-5000));
         }
         
@@ -74,7 +80,7 @@ public class Galaxy {
     private void render(int delta) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-        GLU.gluPerspective(90.0f,(float)Display.getWidth()/(float)Display.getHeight(),0.1f,1500.0f);
+        GLU.gluPerspective(90.0f,(float)Display.getWidth()/(float)Display.getHeight(),0.1f,1000000.0f);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 
@@ -86,10 +92,10 @@ public class Galaxy {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glBegin(GL11.GL_QUADS);
 			GL11.glColor4f(0, 0, 0, 0.03f);
-			GL11.glVertex3d(-3, +3, -1);
-			GL11.glVertex3d(+3, +3, -1);
-			GL11.glVertex3d(+3, -3, -1);
-			GL11.glVertex3d(-3, -3, -1);
+			GL11.glVertex3d(-3,3,-1);
+			GL11.glVertex3d(3,3,-1);
+			GL11.glVertex3d(3,-3,-1);
+			GL11.glVertex3d(-3,-3,-1);
 		GL11.glEnd();
         
         Camera.apply(delta);
@@ -112,7 +118,7 @@ public class Galaxy {
     
     public void clearScreen() {
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT); // GL11.GL_COLOR_BUFFER_BIT
-        GL11.glViewport(0, 0, 1366, 768);
+        GL11.glViewport(0,0,1366,768);
     }
     
     public void initialize3D() {
@@ -129,7 +135,7 @@ public class Galaxy {
         GL11.glLoadIdentity(); // Loads the above matrix mode.
         
         // Sets default perspective location.                       Render Distances: Min   Max
-        GLU.gluPerspective(90.0f,(float)Display.getWidth()/(float)Display.getHeight(),0.1f,1500.0f);
+        GLU.gluPerspective(90.0f,(float)Display.getWidth()/(float)Display.getHeight(),0.1f,1000000.0f);
         
         GL11.glMatrixMode(GL11.GL_MODELVIEW); // Sets the matrix to displaying objects.
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT,GL11.GL_NICEST); // Something for quality.
