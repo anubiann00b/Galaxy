@@ -37,7 +37,7 @@ public class VerticesManager {
         vertexBuffer.put(x);
 		vertexBuffer.put(y);
 		vertexBuffer.put(z);
-
+        
 		colorBuffer.put(r);
 		colorBuffer.put(g);
 		colorBuffer.put(b);

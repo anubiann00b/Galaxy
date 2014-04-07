@@ -15,10 +15,10 @@ public class Galaxy {
     
     public static void main(String[] args) {
         try {
-            Display.setDisplayMode(new DisplayMode(1366,768));
+            Display.setDisplayMode(new DisplayMode(800,600));
             Display.create();
         } catch (LWJGLException e) {
-            System.out.println(e);
+            throw new RuntimeException("Error opening window: " + e);
         }
         Display.setTitle("Galaxy");
         Galaxy galaxy = new Galaxy();
@@ -46,7 +46,7 @@ public class Galaxy {
     
     private ColorRange starColors;
     
-    public final int numPoints = 250000;
+    public final int numPoints = 25000;
     
     private void init() {
         starColors = new ColorRange("colors.png");
@@ -88,22 +88,33 @@ public class Galaxy {
         
         Camera.update(delta);
         
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        
+        GL11.glBegin(GL11.GL_QUADS);
+			GL11.glColor4f(1f, 0, 0, 0);
+			GL11.glVertex3d(-0.05,0.05,-1);
+			GL11.glVertex3d(0.05,0.05,-1);
+			GL11.glVertex3d(0.05,-0.05,-1);
+			GL11.glVertex3d(-0.05,-0.05,-1);
+		GL11.glEnd();
+        
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+        
 		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4f(0, 0, 0, 0.03f);
+			GL11.glColor4f(0, 0, 0, 0.09f);
 			GL11.glVertex3d(-3,3,-1);
 			GL11.glVertex3d(3,3,-1);
 			GL11.glVertex3d(3,-3,-1);
 			GL11.glVertex3d(-3,-3,-1);
 		GL11.glEnd();
-        
+                
         Camera.apply(delta);
         
-        GL11.glEnable(GL11.GL_BLEND);
-        
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+        
+        GL11.glEnable(GL11.GL_BLEND);
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,VBOVertexHandle);
         GL11.glVertexPointer(3,GL11.GL_FLOAT,0,0L);
@@ -118,7 +129,7 @@ public class Galaxy {
     
     public void clearScreen() {
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT); // GL11.GL_COLOR_BUFFER_BIT
-        GL11.glViewport(0,0,1366,768);
+        GL11.glViewport(0,0,800,600);
     }
     
     public void initialize3D() {

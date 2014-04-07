@@ -10,11 +10,11 @@ public class Camera {
     private static Vector oldPosition = new Vector();
     private static Vector rotation = new Vector();
     private static Vector oldRotation = new Vector();
-    private static final float speed = 0.5f;
+    private static final float speed = 0.125f;
     
     public static float getCamX() { return position.getX(); }
     public static float getCamY() { return position.getY(); }
-    public static float getCamZ() { return position.getZ()+2; }
+    public static float getCamZ() { return position.getZ(); }
     
     public static float getDistance(float x, float y, float z) {
         return new Vector(x-position.getX(),y-position.getY(),z-position.getZ()).getMagnitude();
@@ -50,12 +50,12 @@ public class Camera {
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             position.setX(position.getX()-(float)(Math.sin(-rotation.getZ()*Math.PI/180)*speed*delta));
             position.setY(position.getY()-(float)(Math.cos(-rotation.getZ()*Math.PI/180)*speed*delta));
-            //position.setZ(position.getX()-(float)(Math.cos(-rotation.getY()*Math.PI/180)*speed*delta));
+            position.setZ(position.getZ()-(float)(Math.sin(-rotation.getX()*Math.PI/180)*speed*delta));
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             position.setX(position.getX()+(float)(Math.sin(-rotation.getZ()*Math.PI/180)*speed*delta));
             position.setY(position.getY()+(float)(Math.cos(-rotation.getZ()*Math.PI/180)*speed*delta));
-            //position.setZ(position.getX()+(float)(Math.cos(-rotation.getY()*Math.PI/180)*speed*delta));
+            position.setZ(position.getZ()+(float)(Math.sin(-rotation.getX()*Math.PI/180)*speed*delta));
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             position.setX(position.getX()+(float)(Math.sin((-rotation.getZ()-90)*Math.PI/180)*speed*delta));
@@ -72,22 +72,34 @@ public class Camera {
     }
     
     public static void updateRotation(int delta) {
-        //Mouse Input for looking around...
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-			rotation.z -= delta/16;
+			rotation.z -= delta/16.0;
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-			rotation.z += delta/16;
+			rotation.z += delta/16.0;
 		
+        if (rotation.z > 180)
+            rotation.z = -180;
+        if (rotation.z < -180)
+            rotation.z = 180;
+        
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
-			rotation.x -= delta/16;
+			rotation.x -= delta/16.0;
 		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-			rotation.x += delta/16;
+			rotation.x += delta/16.0;
+        
+        if (rotation.x > 180)
+            rotation.x = -180;
+        if (rotation.x < -180)
+            rotation.x = 180;
     }
     
     public static void apply(int delta) {
+        System.out.println(rotation.x + " " + (position.z-oldPosition.z));
+        System.out.println(rotation.z + " " + (position.x-oldPosition.x));
+        System.out.println();
         GL11.glRotated(rotation.getX(),1,0,0);
-        GL11.glRotated(rotation.getY(),0,0,1);
+        //GL11.glRotated(rotation.getY(),0,0,1);
         GL11.glRotated(rotation.getZ(),0,1,0);
-        GL11.glTranslated(-position.getX(),-position.getZ(),-position.getY());
+        GL11.glTranslated(-position.getX(),position.getZ(),-position.getY());
     }
 }
