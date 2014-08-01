@@ -10,7 +10,7 @@ public class VerticesManager {
     private float b;
     
     private FloatBuffer vertexBuffer;
-	private FloatBuffer colorBuffer;
+    private FloatBuffer colorBuffer;
     
     private int length = 0;
     
@@ -35,12 +35,12 @@ public class VerticesManager {
     
     public void addVertex(float x, float y, float z) {
         vertexBuffer.put(x);
-		vertexBuffer.put(y);
-		vertexBuffer.put(z);
-        
-		colorBuffer.put(r);
-		colorBuffer.put(g);
-		colorBuffer.put(b);
+        vertexBuffer.put(y);
+        vertexBuffer.put(z);
+
+        colorBuffer.put(r);
+        colorBuffer.put(g);
+        colorBuffer.put(b);
     }
     
     public FloatBuffer getPositionData() {

@@ -14,10 +14,11 @@ public class ColorRange {
     public ColorRange(String ref) {
         r = new Random();
         Image image = null;
+        
         try {
             image = new Image(ref);
         } catch (SlickException e) {
-            System.out.println("Failed to load colormap: " + e);
+            throw new RuntimeException("Failed to load colormap: " + e);
         }
         
         ArrayList<Color> colorList = new ArrayList<Color>();

@@ -78,10 +78,10 @@ public class Galaxy {
     
     private void render(int delta) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
+        GL11.glLoadIdentity();
         GLU.gluPerspective(90.0f,(float)Display.getWidth()/(float)Display.getHeight(),0.1f,1000000.0f);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
 
         GL11.glPushMatrix();
         
@@ -90,22 +90,22 @@ public class Galaxy {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         
         GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4f(1f, 0, 0, 0);
-			GL11.glVertex3d(-0.05,0.05,-1);
-			GL11.glVertex3d(0.05,0.05,-1);
-			GL11.glVertex3d(0.05,-0.05,-1);
-			GL11.glVertex3d(-0.05,-0.05,-1);
-		GL11.glEnd();
+            GL11.glColor4f(1f, 0, 0, 0);
+            GL11.glVertex3d(-0.05,0.05,-1);
+            GL11.glVertex3d(0.05,0.05,-1);
+            GL11.glVertex3d(0.05,-0.05,-1);
+            GL11.glVertex3d(-0.05,-0.05,-1);
+        GL11.glEnd();
         
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4f(0, 0, 0, 0.09f);
-			GL11.glVertex3d(-3,3,-1);
-			GL11.glVertex3d(3,3,-1);
-			GL11.glVertex3d(3,-3,-1);
-			GL11.glVertex3d(-3,-3,-1);
-		GL11.glEnd();
+        GL11.glBegin(GL11.GL_QUADS);
+            GL11.glColor4f(0, 0, 0, 0.09f);
+            GL11.glVertex3d(-3,3,-1);
+            GL11.glVertex3d(3,3,-1);
+            GL11.glVertex3d(3,-3,-1);
+            GL11.glVertex3d(-3,-3,-1);
+        GL11.glEnd();
                 
         Camera.apply(delta);
         

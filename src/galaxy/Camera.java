@@ -73,20 +73,20 @@ public class Camera {
     
     public static void updateRotation(int delta) {
         if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-			rotation.z -= delta/16.0;
-		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-			rotation.z += delta/16.0;
+            rotation.z -= delta/16.0;
+        if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+            rotation.z += delta/16.0;
 		
         if (rotation.z > 180)
             rotation.z = -180;
         if (rotation.z < -180)
             rotation.z = 180;
         
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
-			rotation.x -= delta/16.0;
-		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-			rotation.x += delta/16.0;
-        
+        if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+            rotation.x -= delta/16.0;
+        if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+            rotation.x += delta/16.0;
+
         if (rotation.x > 180)
             rotation.x = -180;
         if (rotation.x < -180)
