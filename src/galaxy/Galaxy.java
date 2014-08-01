@@ -31,9 +31,8 @@ public class Galaxy {
             galaxy.clearScreen();
             galaxy.render(delta);
             Display.update();
-            long endTime = System.nanoTime();
             Display.sync(60);
-            endTime = System.nanoTime();
+            long endTime = System.nanoTime();
             delta = (int)((endTime - startTime)/1000000);
         }
         Display.destroy();
