@@ -90,7 +90,7 @@ public class Galaxy {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         
         GL11.glBegin(GL11.GL_QUADS);
-            GL11.glColor4f(1f, 0, 0, 0);
+            GL11.glColor4f(1f, 1f, 0, 0);
             GL11.glVertex3d(-0.05,0.05,-1);
             GL11.glVertex3d(0.05,0.05,-1);
             GL11.glVertex3d(0.05,-0.05,-1);
@@ -121,7 +121,14 @@ public class Galaxy {
         GL11.glColorPointer(3,GL11.GL_FLOAT,0,0L);
         GL11.glDrawArrays(GL11.GL_POINTS,0,numPoints);
         
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glBegin(GL11.GL_QUADS);
+            GL11.glColor4f(1f, 0, 0, 0);
+            GL11.glVertex3d(Camera.getCamX()+1,Camera.getCamZ()+1,Camera.getCamY());
+            GL11.glVertex3d(Camera.getCamX(),Camera.getCamZ()+1,Camera.getCamY()+1);
+            GL11.glVertex3d(Camera.getCamX()+1,Camera.getCamZ()+1,Camera.getCamY()+1);
+            GL11.glVertex3d(Camera.getCamX(),Camera.getCamZ()+1,Camera.getCamY());
+        GL11.glEnd();
+        
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glPopMatrix();
     }
